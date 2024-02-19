@@ -31,7 +31,9 @@ ScalarConverter& ScalarConverter::operator=(const ScalarConverter& copie)
 bool	ScalarConverter::isChar(const std::string &input)
 {
 	if (input.length() != 1)
+	{
 		return (false);
+	}
 	if (input.at(0) < std::numeric_limits<char>::min())
 		return (false);
 	return (true);
@@ -129,40 +131,49 @@ void	ScalarConverter::fromChar(std::string input)
 	float	float_value = static_cast<float>(input[0]);
 	double	double_value = static_cast<double>(input[0]);
 	
-	std::cout << "char : " << input << std::endl;
-	std::cout << "int : " << static_cast<int>(input[0])<< std::endl;
-	std::cout << std::fixed << std::setprecision(2) << "float : " << float_value << "f" << std::endl;
-	std::cout << std::fixed << std::setprecision(2) << "double : " << double_value << std::endl;
+	std::cout << CHAR << input << std::endl;
+	std::cout << INT << static_cast<int>(input[0])<< std::endl;
+	std::cout << std::fixed << std::setprecision(2) << FLOAT << float_value << "f" << std::endl;
+	std::cout << std::fixed << std::setprecision(2) << DOUBLE << double_value << std::endl;
 }
 
 void	ScalarConverter::fromInt(std::string input)
 {
 	int	int_value = std::atoi(input.c_str());
 
-    std::cout << "char : " << static_cast<char>(int_value) << std::endl;
-	std::cout << "int : " << int_value << std::endl;
-	std::cout << "float : " << static_cast<float>(int_value) << "f" << std::endl;
-	std::cout << "double : " << static_cast<double>(int_value) << std::endl;
+	if (!(int_value >= 32 && int_value < 127))
+		std::cout << CHAR << "Non Printable" << std::endl;
+	else
+    	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
+	std::cout << INT << int_value << std::endl;
+	std::cout << FLOAT << static_cast<float>(int_value) << ".00f" << std::endl; //not sure about adding .00
+	std::cout << DOUBLE << static_cast<double>(int_value) << ".00" << std::endl; //not sure about adding .00
 }
 
 void	ScalarConverter::fromFloat(std::string input)
 {
 	int	int_value = std::atoi(input.c_str());
 
-	std::cout << "char : " << static_cast<char>(int_value) << std::endl;
-	std::cout << "int : " << int_value << std::endl;
-	std::cout << "float : " << input << std::endl;
-	std::cout << "double : " << static_cast<double>(int_value) << std::endl; 
+	if (!(int_value >= 32 && int_value < 127))
+		std::cout << CHAR << "Non Printable" << std::endl;
+	else
+    	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
+	std::cout << INT << int_value << std::endl;
+	std::cout << FLOAT << input << std::endl;
+	std::cout << DOUBLE << static_cast<double>(int_value) << std::endl; 
 }
 
 void	ScalarConverter::fromDouble(std::string input)
 {
 	int	int_value = std::atoi(input.c_str());
 
-	std::cout << "char : " << static_cast<char>(int_value) << std::endl;
-	std::cout << "int : " << int_value << std::endl;
-	std::cout << "float : " << static_cast<float>(int_value) << "f" << std::endl;
-	std::cout << "double : " << static_cast<double>(int_value) << std::endl;
+	if (!(int_value >= 32 && int_value < 127))
+		std::cout << CHAR << "Non Printable" << std::endl;
+	else
+    	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
+	std::cout << INT << int_value << std::endl;
+	std::cout << FLOAT << static_cast<float>(int_value) << "f" << std::endl;
+	std::cout << DOUBLE << static_cast<double>(int_value) << std::endl;
 }
 
 void	ScalarConverter::convert(std::string& input)

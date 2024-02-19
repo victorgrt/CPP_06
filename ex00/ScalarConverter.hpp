@@ -14,6 +14,12 @@
 #define MAGENTA "\033[1;35m"
 #define RED "\033[1;31m"
 
+#define CHAR "\033[1;35mchar : " RESET
+#define INT  "\033[1;32mint : " RESET
+#define FLOAT "\033[1;34mfloat : " RESET
+#define DOUBLE "\033[1;33mdouble : " RESET
+
+
 enum e_type{
 	error,
 	_char,
@@ -26,8 +32,8 @@ enum e_type{
 class ScalarConverter
 {
 	private : 
-	public : 
 		ScalarConverter();
+	public : 
 		ScalarConverter(const ScalarConverter& copie);
 		~ScalarConverter();
 		ScalarConverter& operator=(const ScalarConverter& copie);

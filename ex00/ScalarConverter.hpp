@@ -25,7 +25,8 @@ enum e_type{
 	_char,
 	_digit,
 	_float,
-	_double
+	_double,
+	_special
 };
 
 
@@ -42,6 +43,9 @@ class ScalarConverter
 		static bool	isFloat(const std::string &input);
 		static bool	isChar(const std::string &input);
 		static bool isDigit(const std::string &input);
+		static bool	isSpecial(const std::string &input);
+
+
 
 		static e_type	getType(const std::string &input);
 
@@ -49,6 +53,7 @@ class ScalarConverter
 		static void	fromInt(const std::string input);
 		static void	fromFloat(const std::string input);
 		static void	fromDouble(const std::string input);
+		static void fromSpecial(std::string input);
 
 		static void convert(std::string& input);
 };

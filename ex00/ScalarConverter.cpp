@@ -1,5 +1,7 @@
 #include "ScalarConverter.hpp"
 #include <limits>
+#include <string.h>
+#include <climits>
 
 ScalarConverter::ScalarConverter()
 {
@@ -113,6 +115,17 @@ bool	ScalarConverter::isDouble(const std::string &input)
 	return (true);
 }	
 
+bool	ScalarConverter::isSpecial(const std::string &input)
+{
+	if (strcmp(input.c_str(), "-inf") == 0)
+		return (true);
+	else if (strcmp(input.c_str(), "+inf") == 0)
+		return (true);
+	else if (strcmp(input.c_str(), "nan") == 0)
+		return (true);
+	return (false);
+}
+
 e_type	ScalarConverter::getType(const std::string &input)
 {
 	if (isChar(input))
@@ -123,6 +136,8 @@ e_type	ScalarConverter::getType(const std::string &input)
 		return _float;
 	else if (isDouble(input))
 		return _double;
+	else if (isSpecial(input))
+		return _special;
 	return error;
 } 
 
@@ -140,20 +155,26 @@ void	ScalarConverter::fromChar(std::string input)
 void	ScalarConverter::fromInt(std::string input)
 {
 	int	int_value = std::atoi(input.c_str());
-
+	std::cout << "here " <<int_value<< std::endl;
 	if (!(int_value >= 32 && int_value < 127))
 		std::cout << CHAR << "Non Printable" << std::endl;
 	else
     	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
-	std::cout << INT << int_value << std::endl;
+	if (int_value > INT_MAX)
+	{
+		std::cout << "HERE?" << std::endl;
+		std::cout << INT << "Non Printable" << std::endl;
+	}
+	else
+		std::cout << INT << int_value << std::endl;
 	std::cout << FLOAT << static_cast<float>(int_value) << ".00f" << std::endl; //not sure about adding .00
 	std::cout << DOUBLE << static_cast<double>(int_value) << ".00" << std::endl; //not sure about adding .00
 }
 
 void	ScalarConverter::fromFloat(std::string input)
 {
-	int	int_value = std::atoi(input.c_str());
-
+	int	int_value = std::atol(input.c_str());
+	std::cout << "here : " << int_value << std::endl;
 	if (!(int_value >= 32 && int_value < 127))
 		std::cout << CHAR << "Non Printable" << std::endl;
 	else
@@ -175,6 +196,35 @@ void	ScalarConverter::fromDouble(std::string input)
 	std::cout << FLOAT << static_cast<float>(int_value) << "f" << std::endl;
 	std::cout << DOUBLE << static_cast<double>(int_value) << std::endl;
 }
+
+void	ScalarConverter::fromSpecial(std::string input)
+{
+	if (strcmp("nan", input.c_str()) == 0)
+	{
+		std::cout << CHAR << "Not A Number" << RESET << std::endl;
+		std::cout << INT << "Not A Number" << RESET << std::endl;
+		std::cout << FLOAT << "Not A Number" << RESET << std::endl;
+		std::cout << DOUBLE << "Not A Number" << RESET << std::endl;
+		return ;
+	}
+	else
+	{
+		if (input[0] == '-')
+		{
+			std::cout << CHAR << "-∞" << RESET << std::endl;
+			std::cout << INT << "-∞" << RESET << std::endl;
+			std::cout << FLOAT << "-∞.00f" << RESET << std::endl;
+			std::cout << DOUBLE << "-∞.00" << RESET << std::endl;
+		}
+		else if (input[0] == '+')
+		{
+			std::cout << CHAR << "+∞" << RESET << std::endl;
+			std::cout << INT << "+∞" << RESET << std::endl;
+			std::cout << FLOAT << "+∞.00f" << RESET << std::endl;
+			std::cout << DOUBLE << "+∞.00" << RESET << std::endl;
+		}
+	}
+}	
 
 void	ScalarConverter::convert(std::string& input)
 {
@@ -202,6 +252,12 @@ void	ScalarConverter::convert(std::string& input)
 		{
 			std::cout << "is double ~" << std::endl;
 			fromDouble(input);
+			break;
+		}
+		case (_special):
+		{
+			std::cout << "is special " << std::endl;
+			fromSpecial(input);
 			break;
 		}
 		default:

@@ -1,4 +1,5 @@
 #include "ScalarConverter.hpp"
+#include <limits.h>
 #include <limits>
 #include <string.h>
 #include <climits>
@@ -25,11 +26,6 @@ ScalarConverter& ScalarConverter::operator=(const ScalarConverter& copie)
 	std::cout << YELLOW << "Operateur d\'affectation called." << RESET << std::endl;	return *this;
 }
 
-
-// gete_type() --> ischar return _char, isint return _int...
-
-
-//IS_e_type
 bool	ScalarConverter::isChar(const std::string &input)
 {
 	if (input.length() != 1)
@@ -61,9 +57,9 @@ bool ScalarConverter::isDigit(const std::string &input)
 
 bool	ScalarConverter::isFloat(const std::string &input)
 {
-	size_t	len = input.length(); // \0 i guess
+	size_t	len = input.length();
 	bool	has_dot = false;
-	if (len < 4 || input[len - 1] != 'f') //checks f at the end + at least 1.1f
+	if (len < 4 || input[len - 1] != 'f')
 		return (false);
 	for (size_t i = 0; i < len; i++)
 	{
@@ -83,9 +79,6 @@ bool	ScalarConverter::isFloat(const std::string &input)
 			else
 				return false;
 		}
-
-		// else if (i != len - 1 && input[i] != '.' && input[i] != 'f' && !isdigit(input[i]))
-		// 	return (false);
 	}
 	if (has_dot != true)
 		return (false);
@@ -94,7 +87,7 @@ bool	ScalarConverter::isFloat(const std::string &input)
 
 bool	ScalarConverter::isDouble(const std::string &input)
 {
-	size_t	len = input.length(); // \0 i guess
+	size_t	len = input.length();
 	bool	has_dot = false;
 	if (len < 1)
 		return (false);
@@ -155,46 +148,70 @@ void	ScalarConverter::fromChar(std::string input)
 void	ScalarConverter::fromInt(std::string input)
 {
 	int	int_value = std::atoi(input.c_str());
-	std::cout << "here " <<int_value<< std::endl;
+	long long secure = std::atoll(input.c_str());
+
 	if (!(int_value >= 32 && int_value < 127))
 		std::cout << CHAR << "Non Printable" << std::endl;
 	else
     	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
-	if (int_value > INT_MAX)
+	if (secure != int_value)
 	{
-		std::cout << "HERE?" << std::endl;
-		std::cout << INT << "Non Printable" << std::endl;
+		std::cout << INT << "OverFlow" << std::endl;
+		std::cout << FLOAT << "OverFlow" << std::endl;
+		std::cout << DOUBLE << "OverFlow" << std::endl;
 	}
 	else
+	{
 		std::cout << INT << int_value << std::endl;
-	std::cout << FLOAT << static_cast<float>(int_value) << ".00f" << std::endl; //not sure about adding .00
-	std::cout << DOUBLE << static_cast<double>(int_value) << ".00" << std::endl; //not sure about adding .00
+		std::cout << FLOAT << std::fixed << std::setprecision(2) << static_cast<float>(int_value) << "f" << std::endl;
+		std::cout << DOUBLE << std::fixed << std::setprecision(2) << static_cast<double>(int_value) << std::endl;
+	}
 }
 
 void	ScalarConverter::fromFloat(std::string input)
 {
 	int	int_value = std::atol(input.c_str());
-	std::cout << "here : " << int_value << std::endl;
+	long long secure = std::atoll(input.c_str());
+
 	if (!(int_value >= 32 && int_value < 127))
 		std::cout << CHAR << "Non Printable" << std::endl;
 	else
     	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
-	std::cout << INT << int_value << std::endl;
-	std::cout << FLOAT << input << std::endl;
-	std::cout << DOUBLE << static_cast<double>(int_value) << std::endl; 
+	if (secure != int_value)
+	{
+		std::cout << INT << "OverFlow" << std::endl;
+		std::cout << FLOAT << "OverFlow" << std::endl;
+		std::cout << DOUBLE << "OverFlow" << std::endl;
+	}
+	else
+	{
+		std::cout << INT << int_value << std::endl;
+		std::cout << FLOAT << std::fixed << std::setprecision(2) << static_cast<float>(int_value) << "f" << std::endl;
+		std::cout << DOUBLE << std::fixed << std::setprecision(2) << static_cast<double>(int_value) << std::endl; 
+	}
 }
 
 void	ScalarConverter::fromDouble(std::string input)
 {
 	int	int_value = std::atoi(input.c_str());
+	long long secure = std::atoll(input.c_str());
 
 	if (!(int_value >= 32 && int_value < 127))
 		std::cout << CHAR << "Non Printable" << std::endl;
 	else
     	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
-	std::cout << INT << int_value << std::endl;
-	std::cout << FLOAT << static_cast<float>(int_value) << "f" << std::endl;
-	std::cout << DOUBLE << static_cast<double>(int_value) << std::endl;
+	if (int_value != secure)
+	{
+		std::cout << INT << "OverFlow" << std::endl;
+		std::cout << FLOAT << "OverFlow" << std::endl;
+		std::cout << DOUBLE << "OverFlow" << std::endl;
+	}
+	else
+	{
+		std::cout << INT << int_value << std::endl;
+		std::cout << FLOAT << std::fixed << std::setprecision(2) << static_cast<float>(int_value) << "f" << std::endl;
+		std::cout << DOUBLE << std::fixed << std::setprecision(2) << static_cast<double>(int_value) << std::endl;
+	}
 }
 
 void	ScalarConverter::fromSpecial(std::string input)
@@ -261,6 +278,16 @@ void	ScalarConverter::convert(std::string& input)
 			break;
 		}
 		default:
-			std::cout << "error ~" << std::endl; break;
+		{
+			std::cout << "error ~" << std::endl;
+			throw ScalarConverter::TypeError();
+			break ;
+		}
 	}
+}
+
+const char *ScalarConverter::TypeError::what(void) const throw()
+{
+	const char *error = "\033[1;31mError\033[0m : Unknown Type";
+	return (error);
 }

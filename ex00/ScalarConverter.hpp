@@ -19,7 +19,6 @@
 #define FLOAT "\033[1;34mfloat : " RESET
 #define DOUBLE "\033[1;33mdouble : " RESET
 
-
 enum e_type{
 	error,
 	_char,
@@ -56,6 +55,12 @@ class ScalarConverter
 		static void fromSpecial(std::string input);
 
 		static void convert(std::string& input);
+
+		class TypeError : public std::exception {
+			public:
+				virtual const char *what() const throw();
+		};
+
 };
 
 #endif

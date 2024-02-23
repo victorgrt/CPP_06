@@ -174,8 +174,9 @@ void	ScalarConverter::fromFloat(std::string input)
 		std::cout << CHAR << "Non Printable" << std::endl;
 	else
     	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
-	if (int_value > DBL_MAX || int_value < DBL_MIN)
+	if ((int_value > DBL_MAX && int_value < DBL_MIN))
 	{
+		std::cout << int_value << " : " << DBL_MIN << std::endl;
 		std::cout << INT << "OverFlow" << std::endl;
 		std::cout << FLOAT << "OverFlow" << std::endl;
 		std::cout << DOUBLE << "OverFlow" << std::endl;
@@ -186,20 +187,20 @@ void	ScalarConverter::fromFloat(std::string input)
 			std::cout << INT << "OverFlow" << std::endl;
 		else
 			std::cout << INT << static_cast<int>(int_value) << std::endl;
-		std::cout << FLOAT << input << std::endl;
-		std::cout << DOUBLE << static_cast<double>(int_value) << std::endl; 
+		std::cout << FLOAT << static_cast<float>(std::atof(input.c_str())) << "f" << std::endl;
+		std::cout << DOUBLE << static_cast<double>(std::atof(input.c_str())) << std::endl;
 	}
 }
 
 void	ScalarConverter::fromDouble(std::string input)
 {
-	float int_value = std::atof(input.c_str());
+	float int_value = strtod(input.c_str(), NULL);
 
 	if (!(int_value >= 32 && int_value < 127))
 		std::cout << CHAR << "Non Printable" << std::endl;
 	else
     	std::cout << CHAR << static_cast<char>(int_value) << std::endl;
-	if (int_value > DBL_MAX || int_value < DBL_MIN)
+	if ((int_value > DBL_MAX && int_value < DBL_MIN))
 	{
 		std::cout << INT << "OverFlow" << std::endl;
 		std::cout << FLOAT << "OverFlow" << std::endl;
@@ -211,8 +212,8 @@ void	ScalarConverter::fromDouble(std::string input)
 			std::cout << INT << "OverFlow" << std::endl;
 		else
 			std::cout << INT << static_cast<int>(int_value) << std::endl;
-		std::cout << FLOAT << static_cast<float>(int_value) << "f" << std::endl;
-		std::cout << DOUBLE << input << std::endl;
+		std::cout << FLOAT << static_cast<float>(std::atof(input.c_str())) << "f" << std::endl;
+		std::cout << DOUBLE << static_cast<double>(std::atof(input.c_str())) << std::endl;
 	}
 }
 
